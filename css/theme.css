@@ -1,8 +1,8 @@
 /* ========== NKS · Theme ========== */
 :root {
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --font-display: Georgia, serif;
+  --font-body:    system-ui, sans-serif;
+  --font-mono:    ui-monospace, Menlo, monospace;
 
   --accent: #6d28d9;
   --accent-2: #8b5cf6;
