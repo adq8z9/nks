@@ -5,6 +5,10 @@ export function npubFromHex(hex) {
   return nip19.npubEncode(hex);
 }
 
+export function nprofileFromHex(hex, relays = []) {
+  return nip19.nprofileEncode({ pubkey: hex, relays });
+}
+
 export function nsecFromHex(hex) {
   // nostr-tools accepts Uint8Array for nsec
   const bytes = Uint8Array.from(hex.match(/.{2}/g).map((b) => parseInt(b, 16)));
