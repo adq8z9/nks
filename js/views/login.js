@@ -4,9 +4,10 @@ import { hasVault, loadVault, saveVault } from "../storage.js";
 import { generateKeyPair } from "../crypto.js";
 import { hexFromAny } from "../nip19.js";
 import { getPublicKeyHex } from "../crypto.js";
-import { setSessionPassword } from "../keyring.js";
+import { setSessionPassword, persistVault } from "../keyring.js";
 import { toast, escapeHtml } from "../ui-utils.js";
 import { normalizeRelayUrl } from "../relays.js";
+import { fetchExistingKeyring } from "../sync.js";
 
 const DEFAULT_RELAYS = ["wss://relay.damus.io", "wss://nos.lol"];
 
