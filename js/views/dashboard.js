@@ -1,6 +1,6 @@
 // js/views/dashboard.js — Master card + keyring grid
 import { state, setState } from "../state.js";
-import { npubFromHex } from "../nip19.js";
+import { npubFromHex, nprofileFromHex } from "../nip19.js";
 import { shortHex } from "../crypto.js";
 import { escapeHtml, toast, copy } from "../ui-utils.js";
 import { publishMasterPublicKeyring, publishMasterPrivateKeyring } from "../keyring.js";
@@ -53,20 +53,21 @@ function openNewSubkeyView() {
 function renderMasterCard() {
   const m = state.masterkey;
   const npub = npubFromHex(m.pubkey);
+  const nprofile = nprofileFromHex(m.pubkey, m.homeRelays);
   const relays = m.homeRelays.map((r) => `<span class="relay-pill">${escapeHtml(r)}</span>`).join("");
   document.getElementById("masterCard").innerHTML = `
     <div class="key-master-label">Masterkey</div>
     <div class="key-master-name">Root</div>
-    <div class="key-master-npub" title="${escapeHtml(npub)}">${escapeHtml(npub)}</div>
-    <div class="key-master-npub" title="${escapeHtml(m.pubkey)}">${escapeHtml(m.pubkey)}</div>
+    <div class="key-master-npub" title="${escapeHtml(npub)}">bech32: ${escapeHtml(npub)}</div>
+    <div class="key-master-npub" title="${escapeHtml(m.pubkey)}">hex: ${escapeHtml(m.pubkey)}</div>
     <div class="key-master-relays">${relays || "<span class='relay-pill'>no relays</span>"}</div>
     <div class="key-master-actions">
       <button class="link-btn" data-action="publish-public">Publish kind 17991</button>
       <button class="link-btn" data-action="publish-private">Publish kind 17992</button>
-      <button class="link-btn" id="copyNpub">Copy npub</button>
+      <button class="link-btn" id="copyNprofile">Copy nprofile</button>
     </div>`;
   wireActions();
-  document.getElementById("copyNpub").addEventListener("click", (e) => copy(npub, e.target));
+  document.getElementById("copyNprofile").addEventListener("click", (e) => copy(nprofile, e.target));
 }
 
 function renderKeysGrid() {
