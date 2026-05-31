@@ -3,7 +3,8 @@ import { state, setState } from "../state.js";
 import { npubFromHex, nprofileFromHex } from "../nip19.js";
 import { shortHex } from "../crypto.js";
 import { escapeHtml, toast, copy } from "../ui-utils.js";
-import { publishMasterPublicKeyring, publishMasterPrivateKeyring } from "../keyring.js";
+import { publishMasterPublicKeyring, publishMasterPrivateKeyring, persistVault } from "../keyring.js";
+import { fetchExistingKeyring } from "../sync.js";
 
 export function renderDashboard() {
   renderMasterCard();
@@ -25,15 +26,34 @@ async function handleAction(action) {
   if (action === "goto-import") return setState({ view: "import" });
   if (action === "new-subkey") return openNewSubkeyView();
   if (action === "back-to-dashboard") return setState({ view: "dashboard" });
-  if (action === "publish-public") {
-    const t = "Publishing kind 17991…"; toast(t);
-    const res = await publishMasterPublicKeyring().catch((e) => [{ ok: false, error: e.message }]);
-    summarizePublish(res, "Public keyring");
-  }
-  if (action === "publish-private") {
-    toast("Publishing kind 17992…");
-    const res = await publishMasterPrivateKeyring().catch((e) => [{ ok: false, error: e.message }]);
-    summarizePublish(res, "Private keyring");
+  if (action === "publish-keyring") return publishKeyring();
+  if (action === "refresh-keyring") return refreshKeyring();
+}
+
+async function publishKeyring() {
+  toast("Publishing keyring…");
+  const [resPub, resPriv] = await Promise.all([
+    publishMasterPublicKeyring().catch((e) => [{ ok: false, error: e.message }]),
+    publishMasterPrivateKeyring().catch((e) => [{ ok: false, error: e.message }]),
+  ]);
+  summarizePublish(resPub, "Public 17991");
+  summarizePublish(resPriv, "Private 17992");
+}
+
+async function refreshKeyring() {
+  toast("Fetching keyring from relays…");
+  try {
+    const existing = await fetchExistingKeyring(state.masterkey);
+    if (existing.length > 0) {
+      setState({ keyring: existing });
+      await persistVault();
+      toast(`Refreshed — ${existing.length} key(s) from relays`, "success");
+    } else {
+      toast("No keyring found on relays", "info");
+    }
+  } catch (e) {
+    console.warn("Keyring refresh failed:", e);
+    toast("Could not fetch keyring from relays", "error");
   }
 }
 
@@ -46,7 +66,6 @@ function summarizePublish(results, label) {
 }
 
 function openNewSubkeyView() {
-  // Selects the keys view in "new" mode
   setState({ view: "key", _newSubkey: true });
 }
 
@@ -54,7 +73,8 @@ function renderMasterCard() {
   const m = state.masterkey;
   const npub = npubFromHex(m.pubkey);
   const nprofile = nprofileFromHex(m.pubkey, m.homeRelays);
-  const relays = m.homeRelays.map((r) => `<span class="relay-pill">${escapeHtml(r)}</span>`).join("");
+  const relays = m.homeRelays
+    .map((r) => `<span class="relay-pill">${escapeHtml(r)}</span>`).join("");
   document.getElementById("masterCard").innerHTML = `
     <div class="key-master-label">Masterkey</div>
     <div class="key-master-name">Root</div>
@@ -62,8 +82,8 @@ function renderMasterCard() {
     <div class="key-master-npub" title="${escapeHtml(m.pubkey)}">hex: ${escapeHtml(m.pubkey)}</div>
     <div class="key-master-relays">${relays || "<span class='relay-pill'>no relays</span>"}</div>
     <div class="key-master-actions">
-      <button class="link-btn" data-action="publish-public">Publish kind 17991</button>
-      <button class="link-btn" data-action="publish-private">Publish kind 17992</button>
+      <button class="link-btn" data-action="refresh-keyring">Refresh keyring</button>
+      <button class="link-btn" data-action="publish-keyring">Publish keyring</button>
       <button class="link-btn" id="copyNprofile">Copy nprofile</button>
     </div>`;
   wireActions();
