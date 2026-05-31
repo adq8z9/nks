@@ -106,6 +106,12 @@ function renderKeysGrid() {
   });
 }
 
+function shortNpub(hex) {
+  const npub = npubFromHex(hex);
+  if (npub.length <= 24) return npub;
+  return `${npub.slice(0, 14)}…${npub.slice(-8)}`;
+}
+
 function keyCardHtml(k) {
   const funcs = (k.functions || []).map((f) =>
     `<span class="func-tag">${escapeHtml(f)}</span>`).join("");
@@ -120,6 +126,9 @@ function keyCardHtml(k) {
       <div class="key-name">${escapeHtml(k.name || "Untitled key")}</div>
       <div class="key-desc">${escapeHtml(k.description || "")}</div>
       <div class="key-functions">${funcs}</div>
-      <div class="key-card-foot">${shortHex(k.pubkey, 10, 10)}</div>
+      <div class="key-card-foot">
+        <div>bech32: ${escapeHtml(shortNpub(k.pubkey))}</div>
+        <div>hex: ${shortHex(k.pubkey, 10, 10)}</div>
+      </div>
     </div>`;
 }
