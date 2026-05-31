@@ -25,6 +25,7 @@
   </div>
   <nav class="topnav" id="topnav" hidden>
     <button class="nav-link" data-view="dashboard">Keyring</button>
+    <button class="nav-link" data-view="nlogin">Nlogin</button>
     <button class="nav-link" data-view="settings">Settings</button>
   </nav>
   <div class="topbar-actions">
@@ -59,8 +60,6 @@
         <p class="view-sub" id="masterIdent"></p>
       </div>
       <div class="view-actions">
-        <button class="btn-ghost" data-action="goto-import">+ Import nlogin</button>
-        <button class="btn-ghost" data-action="goto-export">+ Export nlogin</button>
         <button class="btn-primary" data-action="new-related-key">+ New related key</button>
       </div>
     </div>
@@ -73,29 +72,19 @@
     </div>
   </section>
 
-  <!-- Import nlogin -->
-  <section class="view" id="view-import" data-view="import" hidden>
+  <!-- Nlogin (import + export) -->
+  <section class="view" id="view-nlogin" data-view="nlogin" hidden>
     <div class="view-header">
       <div>
-        <h2 class="view-title">Import nlogin</h2>
-        <p class="view-sub">Paste an <code>nlogin1…</code> string or scan a QR code.</p>
+        <h2 class="view-title">Nlogin</h2>
+        <p class="view-sub">Import or export <code>nlogin1…</code> strings to share subkeys with login programs.</p>
       </div>
     </div>
-    <div class="split">
-      <div class="card import-card" id="importPanel"></div>
-      <div class="card scan-card" id="scanPanel"></div>
+    <div class="login-tabs" id="nloginTabs" role="tablist">
+      <button class="active" data-tab="import">Import</button>
+      <button data-tab="export">Export</button>
     </div>
-  </section>
-
-  <!-- Export nlogin -->
-  <section class="view" id="view-export" data-view="export" hidden>
-    <div class="view-header">
-      <div>
-        <h2 class="view-title">Export nlogin</h2>
-        <p class="view-sub">Select a subkey and share its <code>nlogin1…</code> via QR or string.</p>
-      </div>
-    </div>
-    <div class="card" id="exportCard" style="max-width:580px;"></div>
+    <div id="nloginContent"></div>
   </section>
 
   <!-- Key detail / share -->
