@@ -23,8 +23,6 @@ function wireActions() {
 }
 
 async function handleAction(action) {
-  if (action === "goto-import") return setState({ view: "import" });
-  if (action === "goto-export") return setState({ view: "export", _exportKey: null });
   if (action === "new-related-key") return openNewRelatedKeyView();
   if (action === "back-to-dashboard") return setState({ view: "dashboard" });
   if (action === "publish-keyring") return publishKeyring();
