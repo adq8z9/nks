@@ -59,8 +59,9 @@
         <p class="view-sub" id="masterIdent"></p>
       </div>
       <div class="view-actions">
-        <button class="btn-ghost" data-action="goto-import">Import nlogin</button>
         <button class="btn-primary" data-action="new-subkey">+ New subkey</button>
+        <button class="btn-primary" data-action="goto-import">+ Import nlogin</button>
+        <button class="btn-primary" data-action="goto-export">+ Export nlogin</button>
       </div>
     </div>
     <div class="key-master" id="masterCard"></div>
@@ -84,6 +85,17 @@
       <div class="card import-card" id="importPanel"></div>
       <div class="card scan-card" id="scanPanel"></div>
     </div>
+  </section>
+
+  <!-- Export nlogin -->
+  <section class="view" id="view-export" data-view="export" hidden>
+    <div class="view-header">
+      <div>
+        <h2 class="view-title">Export nlogin</h2>
+        <p class="view-sub">Select a subkey and share its <code>nlogin1…</code> via QR or string.</p>
+      </div>
+    </div>
+    <div class="card" id="exportCard" style="max-width:580px;"></div>
   </section>
 
   <!-- Key detail / share -->
