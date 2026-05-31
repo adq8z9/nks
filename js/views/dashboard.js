@@ -24,6 +24,7 @@ function wireActions() {
 
 async function handleAction(action) {
   if (action === "goto-import") return setState({ view: "import" });
+  if (action === "goto-export") return setState({ view: "export", _exportKey: null });
   if (action === "new-subkey") return openNewSubkeyView();
   if (action === "back-to-dashboard") return setState({ view: "dashboard" });
   if (action === "publish-keyring") return publishKeyring();
