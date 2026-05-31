@@ -25,7 +25,9 @@ function wireActions() {
 async function handleAction(action) {
   if (action === "new-related-key") return openNewRelatedKeyView();
   if (action === "import-related-key") return openImportRelatedKeyView();
-  if (action === "back-to-dashboard") return setState({ view: "dashboard" });
+  if (action === "back-to-dashboard") {
+    return setState({ view: "dashboard", _newSubkey: false, _importKey: false });
+  }
   if (action === "publish-keyring") return publishKeyring();
   if (action === "refresh-keyring") return refreshKeyring();
 }
@@ -104,7 +106,13 @@ function renderKeysGrid() {
   grid.innerHTML = state.keyring.map(keyCardHtml).join("");
   grid.querySelectorAll(".key-card").forEach((card) => {
     card.addEventListener("click", () => {
-      setState({ view: "key", selectedKey: card.dataset.pubkey });
+      // Bug fix: clear form flags so key detail shows the actual key
+      setState({
+        view: "key",
+        selectedKey: card.dataset.pubkey,
+        _newSubkey: false,
+        _importKey: false,
+      });
     });
   });
 }
