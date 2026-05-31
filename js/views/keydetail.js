@@ -4,9 +4,11 @@ import { generateKeyPair, shortHex } from "../crypto.js";
 import { npubFromHex, nsecFromHex } from "../nip19.js";
 import { addKeyEntry, removeKeyEntry } from "../keyring.js";
 import { toast, modal, escapeHtml, attachCopy } from "../ui-utils.js";
+import { renderImportRelatedKeyForm } from "./keyimport.js";
 
 export async function renderKeyDetail() {
   const root = document.getElementById("keyDetailCard");
+  if (state._importKey) { renderImportRelatedKeyForm(root); return; }
   if (state._newSubkey) { renderNewRelatedKeyForm(root); return; }
   const key = findKey(state.selectedKey);
   if (!key) { toast("Key not found"); setState({ view: "dashboard" }); return; }

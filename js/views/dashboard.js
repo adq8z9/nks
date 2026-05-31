@@ -24,6 +24,7 @@ function wireActions() {
 
 async function handleAction(action) {
   if (action === "new-related-key") return openNewRelatedKeyView();
+  if (action === "import-related-key") return openImportRelatedKeyView();
   if (action === "back-to-dashboard") return setState({ view: "dashboard" });
   if (action === "publish-keyring") return publishKeyring();
   if (action === "refresh-keyring") return refreshKeyring();
@@ -65,7 +66,11 @@ function summarizePublish(results, label) {
 }
 
 function openNewRelatedKeyView() {
-  setState({ view: "key", _newSubkey: true });
+  setState({ view: "key", _newSubkey: true, _importKey: false });
+}
+
+function openImportRelatedKeyView() {
+  setState({ view: "key", _importKey: true, _newSubkey: false });
 }
 
 function renderMasterCard() {
