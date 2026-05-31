@@ -19,7 +19,13 @@ function init() {
   document.getElementById("logoutBtn").addEventListener("click", () => {
     lockSession();
     // Clear in-memory state but keep encrypted vault on disk
-    setState({ masterkey: null, keyring: [], view: "login" });
+    setState({
+      masterkey: null,
+      keyring: [],
+      view: "login",
+      _newSubkey: false,
+      _importKey: false,
+    });
   });
   wireTopNav();
 
