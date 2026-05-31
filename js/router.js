@@ -41,6 +41,11 @@ export function wireTopNav() {
   document.getElementById("topnav").addEventListener("click", (e) => {
     const btn = e.target.closest(".nav-link");
     if (!btn) return;
-    import("./state.js").then((m) => m.setState({ view: btn.dataset.view, _newSubkey: false }));
+    // Clear form flags when navigating via top nav
+    import("./state.js").then((m) => m.setState({
+      view: btn.dataset.view,
+      _newSubkey: false,
+      _importKey: false,
+    }));
   });
 }
